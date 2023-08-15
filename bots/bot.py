@@ -1,38 +1,17 @@
 import discord
 from discord.ext import commands
 
-'''
-Warren:
-
-I'll briefly explain what the bot is going to be doing and what to add to the script.
-The bot is going to be scanning all incoming messages and checking if any of them break
-the rules of the server. We'll prototype in python to quickly build up the functionality 
-we want. Then eventually, we'll switch to a language that is faster with more parralelism.
-
-My plan for the bot is to collect every new message in the server and run them through a 
-neural network that will predict if the message is breaking the rules. If the message is
-breaking the rules then it will be sent to two other neural networks. One of the networks
-will generate a summary of why the message broke the rules. The second network will identify
-specific words that break the rules. There will also be some functionality for when the rules
-have been broken too many times. This could look like a few things. I was thinking something
-like a timeout or a ban.
-
-I am currently working on the classifier model that will predict if the message is breaking
-the rules. 
-
-In the meantime, would you implement a mechanism that will collect all the messages in order to
-be run through the models. Have the messages save to a csv file for later use. Just create a function stub for 
-the calls to the model. Once the models are ready well replace the stubs. Also, create a mechanism 
-that counts how many times the rules have been broken and if they've exceeded some threshold, then carry 
-out the user timeout. Test it out in a server and update the repository with your implementation.
-
-'''
+from run_local_RAC import RAC  #local rule adherance classifier
 
 
 
 def main():
+    #instantiate local rule adherance classifier
+    local_RAC = RAC()
+
     intents = discord.Intents.default()
     intents.messages = True
+    intents.message_content = True  # This one is important!
     intents.guilds = True
     intents.members = True
 
@@ -49,18 +28,24 @@ def main():
 
 
     #check for incoming messages
-    messages_reciece = []
     @bot.event
     async def on_message(message):
         
+        print(type(message.content))
+        print(str(message.content))
+
+
         # return if the message author is the bot
         if message.author == bot.user:
             return
         
-        # Send a message to the channel the original message came from
-        await message.channel.send("I received a message!")
+        rule_adherance = local_RAC.run(message.content) #either 1 or 0
 
-        messages_reciece.append(message) 
+        #inference on incoming messages
+        if rule_adherance:
+            await message.channel.send("This message is inappropriate!")
+        else:
+            await message.channel.send("This message is appropriate!")
 
         await bot.process_commands(message)
 
@@ -71,6 +56,6 @@ def main():
 
 
 
-token =  #Token goes here
+token =  "Token Here"
 
 main()
