@@ -21,9 +21,18 @@ less thought out at current, but I imagine it could look something like: Each fl
 either in dm or the channel it was sent. Then if 5 innapropriat emessages in a row implement a timeout or a 
 ban. Something of that nature.
 
-### Current State of Project e --- (ReadMe last updated pon 8/9/23)
+### Current State of Project --- (ReadMe last updated on 8/14/23)
+
+The rule adherance classifier for basic innapropriate/toxic behavior has been trained. The
+model is a distilbert uncased fine tuned on the wikipedia toxic comment dataset for binary 
+sentiment analysis. The next step is to implement this model into the discord bot.
+
+
+#### 8/9/23 update
 
 Currently, the project is in its infancy. I am building out the functionality of the bot as well as training the 
 binary sentence classifier. 
 
 If you want to help out, submit a pull request. If it checks out, it will be committed. 
+
+
