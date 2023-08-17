@@ -8,6 +8,7 @@ from run_local_RAC import RAC  #local rule adherance classifier
 
 
 def main():
+    print("\n\nStarting Content Moderator...\n\nGetting Local Rule Adherance Classifier...")
     #instantiate local rule adherance classifier
     local_RAC = RAC()
 

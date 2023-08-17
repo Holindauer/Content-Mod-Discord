@@ -4,6 +4,7 @@ from transformers import DistilBertTokenizerFast
 from transformers import DistilBertConfig, DistilBertForSequenceClassification
 import transformers
 from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
+import os
 
 """
 See RAC.run() at the bottom for explantation of how this class is used.
@@ -12,9 +13,25 @@ See RAC.run() at the bottom for explantation of how this class is used.
 
 class RAC():
     def __init__(self):
+        # Get the absolute path of the current script
+        script_path = os.path.abspath(__file__)
+
+        # Get the directory containing the script
+        script_dir = os.path.dirname(script_path)
+        print(f'\nFinding Rule Adherance Classifier...\nScript Directory {script_dir}')
+
+        parent_dir = "\\".join(script_dir.split(os.sep)[:-1])
+        print(f'Parent Directory {parent_dir}')
+
+        #Append repo structure to local machine path
+        model_path = parent_dir + '\\local_models\\Models\\Rule Adherence Classifier'
+        print(f'Model Path {model_path}')
+        print(f'Rule Adherance Classifier Model Files: {os.listdir(model_path)}\n\n')
+
+
         #load fine tuned classifier for inference
-        config = DistilBertConfig.from_pretrained('Directory with Model Files', num_labels=2)
-        self.model = DistilBertForSequenceClassification.from_pretrained('Directory with Model Files', config=config)
+        config = DistilBertConfig.from_pretrained(model_path, num_labels=2)
+        self.model = DistilBertForSequenceClassification.from_pretrained(model_path, config=config)
         self.tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
 
     #Preration of Text Data#############################################################################################################
