@@ -7,9 +7,9 @@
 This project intends to create a discord bot that is able to autonomously moderate a server using natural
 language processing. 
 
-Currently this project is in its early days. To use the model as it is now, download the model files by 
-following the directions in local_models/instructions. Then run the bot.py script with your own discord bot 
-token and set your bot to administrator role in the dev portal.
+To run the bot on your local machine, clone the repository. Then navigate to Content-Mod-DiscordBot/bots/run.py
+Running this script with your own discord bot token will download the model files needed to run the bot and start 
+it up on your server.
 
 #### Current Functionality Includes:
 
