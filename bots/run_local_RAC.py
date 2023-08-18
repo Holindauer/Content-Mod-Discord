@@ -13,6 +13,8 @@ See RAC.run() at the bottom for explantation of how this class is used.
 
 class RAC():
     def __init__(self):
+        dash_line = "-"*50 + "\n"
+        print(f"{dash_line*3}\nInsantiating Local Rule Adherance Classifier...\n{dash_line*3}")
         # Get the absolute path of the current script
         script_path = os.path.abspath(__file__)
 
@@ -24,7 +26,7 @@ class RAC():
         print(f'Parent Directory {parent_dir}')
 
         #Append repo structure to local machine path
-        model_path = parent_dir + '\\local_models\\Models\\Rule Adherence Classifier'
+        model_path = parent_dir + '\\local_models\\Models\\'
         print(f'Model Path {model_path}')
         print(f'Rule Adherance Classifier Model Files: {os.listdir(model_path)}\n\n')
 
@@ -33,6 +35,8 @@ class RAC():
         config = DistilBertConfig.from_pretrained(model_path, num_labels=2)
         self.model = DistilBertForSequenceClassification.from_pretrained(model_path, config=config)
         self.tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
+
+
 
     #Preration of Text Data#############################################################################################################
     def encode(self, comment, label):

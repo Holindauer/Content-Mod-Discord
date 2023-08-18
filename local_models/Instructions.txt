@@ -1,3 +1,7 @@
+Instructions if model downloader fails:
+
+
+
 To run models locally, download the model files from this google drive folder:
 
 https://drive.google.com/drive/folders/1MUpmOU9G1g0DljfV35ddwehzG0w1S69W?usp=sharing
