@@ -26,7 +26,7 @@ class RAC():
         print(f'Parent Directory {parent_dir}')
 
         #Append repo structure to local machine path
-        model_path = parent_dir + '\\local_models\\Models\\'
+        model_path = parent_dir + '\\local_models\\Models\\rule_adherance_classifier\\'
         print(f'Model Path {model_path}')
         print(f'Rule Adherance Classifier Model Files: {os.listdir(model_path)}\n\n')
 

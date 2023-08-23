@@ -5,7 +5,7 @@ from download_model_files import Downloader
 
 def get_dependencies():
     downloader = Downloader() #instantiate the model files downloader
-    downloader.download_model_files() #download the model files if they do not exist locally
+    downloader.get_models() #download the model files if they do not exist locally
 
     local_RAC = RAC() #instantiate the local Rule Adherence Classifier
 
@@ -22,7 +22,7 @@ def main():
 
 
 
-token = #token goes here
+token =  #token goes here
 
 if __name__ == "__main__":
     main()
