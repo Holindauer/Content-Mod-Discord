@@ -98,7 +98,3 @@ class Downloader():
         except:
             print("\n\n\nError Downloading Model Files. \nTo Download Manually, Follow the Instructions at Content-Mod-Bot\\local_models\\Models\\Instructions.txt\n\n\n ")
 
-        
-
-downloader = Downloader()
-downloader.get_models()
