@@ -7,9 +7,11 @@ from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassific
 import os
 
 """
-See RAC.run() at the bottom for explantation of how this class is used.
+This script is used to run the rule adherance classifier locally within the discord bot.
+When run.py is run, the model files will be downloaded (if needed) to the correct
+path for running this script. run.py facilitates the high level moving of the bot. It will
+coordinate bot.py and run_local_RAC.py to make predictions on discord messages.
 """
-
 
 class RAC():
     def __init__(self):
@@ -35,8 +37,6 @@ class RAC():
         config = DistilBertConfig.from_pretrained(model_path, num_labels=2)
         self.model = DistilBertForSequenceClassification.from_pretrained(model_path, config=config)
         self.tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
-
-
 
     #Preration of Text Data#############################################################################################################
     def encode(self, comment, label):

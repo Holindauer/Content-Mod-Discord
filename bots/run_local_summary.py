@@ -32,10 +32,16 @@ class Summary():
         print(f'Model Path {model_path}')
         print(f'Rule Adherance Classifier Model Files: {os.listdir(model_path)}\n\n')
 
+        # currently the model is not fine tuned enough to be deployed. I am working on constructing a 
+        # larger and better dataset to train on. Currently the model outputs no tokens and I am not sure why.
+        # in the meantime, in order to develop the bot further I am just loading in the vase t5-model for summary
+        # the base model does summarize but it does not give a clean summary like I intend to implement.
+        # This init function can still access the fine tuneed model files, just replace 't5-small' .from_pretrained() path
+        # with the model_path variable in config and self.model but not in the tokenizer. The tokenizer must be the base model
 
         #load fine tuned classifier for inference
-        config = T5Config.from_pretrained(model_path)  
-        self.model = T5ForConditionalGeneration.from_pretrained(model_path, config=config)
+        config = T5Config.from_pretrained('t5-small')  
+        self.model = T5ForConditionalGeneration.from_pretrained('t5-small', config=config)
         self.tokenizer = T5TokenizerFast.from_pretrained('t5-small')
 
 
@@ -66,12 +72,11 @@ class Summary():
     
     #####################################################################################################################################
 
-
     def inference(self, model, encoded_message_df):
         '''
         This function runs inference on the encoded data. The model and message df are passed in as an argument
         '''
-
+        
         # Check if CUDA is available
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -87,14 +92,10 @@ class Summary():
         # Perform inference 
         with torch.no_grad():
             #.generate() returns tokenized ids of the generated summary
-            outputs = model.generate(input_ids, attention_mask=attention_mask, max_new_tokens=20)
-            print(f"Raw outputs: {outputs}")
+            outputs = model.generate(input_ids, attention_mask=attention_mask, max_new_tokens=10)
 
-        
         # Decode the output tokens to a string
-        summary = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
-
-        return summary
+        return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
 
     #####################################################################################################################################
     

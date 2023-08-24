@@ -16,3 +16,6 @@ The bot will read the files in from Content-Mod-DiscordBot/local_models/Models/D
 
 The Directory_Containing_Model_Files is specific to which model is being accessed.
 
+
+
+Also, check if the Models dir has been deleted. That is needed for the models to be downloaded.
