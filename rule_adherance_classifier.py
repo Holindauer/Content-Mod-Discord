@@ -15,31 +15,20 @@ coordinate bot.py and run_local_RAC.py to make predictions on discord messages.
 
 class RAC():
     def __init__(self):
-        dash_line = "-"*50 + "\n"
-        print(f"{dash_line*3}\nInsantiating Local Rule Adherance Classifier...\n{dash_line*3}")
-        # Get the absolute path of the current script
-        script_path = os.path.abspath(__file__)
+        dash_line = "-" * 50 + "\n"
+        print(f"{dash_line * 3}\nInstantiating Local Rule Adherence Classifier...\n{dash_line * 3}")
 
-        # Get the directory containing the script
-        script_dir = os.path.dirname(script_path)
-        print(f'\nFinding Rule Adherance Classifier...\nScript Directory {script_dir}')
-
-        parent_dir = "\\".join(script_dir.split(os.sep)[:-1])
-        print(f'Parent Directory {parent_dir}')
-
-        #Append repo structure to local machine path
-        model_path = parent_dir + '\\local_models\\Models\\rule_adherance_classifier\\'
-        print(f'Model Path {model_path}')
-        print(f'Rule Adherance Classifier Model Files: {os.listdir(model_path)}\n\n')
+        try:
+            config = DistilBertConfig.from_pretrained("model", num_labels=2)
+            self.model = DistilBertForSequenceClassification.from_pretrained("model", config=config)
+            self.tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
+        except Exception as e:
+            print(f'Error loading model: {e}')
 
 
-        #load fine tuned classifier for inference
-        config = DistilBertConfig.from_pretrained(model_path, num_labels=2)
-        self.model = DistilBertForSequenceClassification.from_pretrained(model_path, config=config)
-        self.tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
 
-    #Preration of Text Data#############################################################################################################
     def encode(self, comment, label):
+        
         #tokenize
         encoded = self.tokenizer(comment, truncation=True, padding='max_length', max_length=128, return_tensors="pt")
         
@@ -69,19 +58,16 @@ class RAC():
         
         # Convert list of dictionaries to dataframe
         return pd.DataFrame(list_of_dicts)
-    #####################################################################################################################################
 
 
     def inference(self, model, encoded_message_df):
-        # Check if CUDA is available
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        print(f"Using {device}")
 
         # Convert 'input_ids' and 'attention_mask' columns to tensors for model input
         input_ids = torch.tensor(encoded_message_df['input_ids'].tolist())
         attention_mask = torch.tensor(encoded_message_df['attention_mask'].tolist())
 
         # Move and model input data to the device
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model.to(device)
         model.eval()
         input_ids = input_ids.to(device)
@@ -95,7 +81,6 @@ class RAC():
         # Use the argmax function to get the predicted binary labels
         return torch.argmax(logits, dim=1).cpu()
 
-    #####################################################################################################################################
     
     def run(self, discord_message):
         '''
@@ -115,8 +100,6 @@ class RAC():
         encoded_message_df = self.apply_encoding(message_df)
 
         # Perform inference
-        prediction = self.inference(self.model, encoded_message_df)
+        return self.inference(self.model, encoded_message_df).item()
 
-        # Return the prediction
-        return prediction.item()
     
